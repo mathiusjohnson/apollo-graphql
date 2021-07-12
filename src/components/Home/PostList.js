@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import React from 'react';
 import PostListItem from './PostListItem';
 
-const USER_QUERY = gql`
+export const POSTS_QUERY = gql`
   query {
     getAllPosts {
       id
@@ -17,14 +17,13 @@ const USER_QUERY = gql`
 `;
 
 const PostList = () => {
-  const { data } = useQuery(USER_QUERY);
-  console.log(data);
+  const { data } = useQuery(POSTS_QUERY);
   return (
     <div>
       {data && (
         <>
           {data.getAllPosts.map((post) => (
-            <PostListItem key={post.id} post={post} />
+            <PostListItem key={post.id} post={post} POSTS_QUERY={POSTS_QUERY} />
           ))}
         </>
       )}
