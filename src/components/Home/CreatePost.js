@@ -19,8 +19,7 @@ const CreatePost = () => {
   const authToken = JSON.parse(localStorage.getItem('auth'))
     ? JSON.parse(localStorage.getItem('auth'))
     : '';
-  // console.log(JSON.parse(authToken));
-  const [createUser] = useMutation(CREATE_POST_MUTATION, {
+  const [createPost] = useMutation(CREATE_POST_MUTATION, {
     variables: {
       textBody: postText,
       posterId: authToken.user.id,
@@ -28,11 +27,10 @@ const CreatePost = () => {
     onError: (error) => {
       console.log(error);
     },
-    onCompleted: () => history.push('/'),
+    // onCompleted: () => history.push('/'),
   });
-  console.log(postText);
   return (
-    <form onSubmit={createUser} className="flex space-x-2">
+    <form onSubmit={createPost} className="flex space-x-2">
       <textarea onChange={onContentChanged} className="rounded-lg"></textarea>
       <button type="submit" className="btn btn-primary">
         Post
