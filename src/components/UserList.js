@@ -5,22 +5,26 @@ import User from './User';
 
 const USER_QUERY = gql`
   query {
-    users {
+    getAllUsers {
       id
       password
       username
+      posts {
+        textBody
+        posterId
+      }
     }
   }
 `;
 
 const UserList = () => {
   const { data } = useQuery(USER_QUERY);
-
+  console.log(data);
   return (
     <div>
       {data && (
         <>
-          {data.users.map((user) => (
+          {data.getAllUsers.map((user) => (
             <User key={user.id} user={user} />
           ))}
         </>
