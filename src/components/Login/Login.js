@@ -35,7 +35,6 @@ const Login = () => {
       return;
     },
     onCompleted: ({ login }) => {
-      console.log(login);
       const authStorage = {
         AUTH_TOKEN,
         token: login.token,
