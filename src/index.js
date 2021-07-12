@@ -13,7 +13,6 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { AUTH_TOKEN } from './constants';
 
 // 2
 const httpLink = createHttpLink({
@@ -25,7 +24,6 @@ const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('auth')
     ? JSON.parse(localStorage.getItem('auth'))
     : '';
-  console.log('in client: ', token.token);
   return {
     headers: {
       ...headers,
@@ -37,7 +35,26 @@ const authLink = setContext((_, { headers }) => {
 // 3
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      MutationEvent: {
+        fields: {
+          removePost: {
+            merge(_, incoming, { cache }) {
+              cache.modify({
+                fields: {
+                  Post(existing = []) {
+                    console.log('existing and incoming: ', existing, incoming);
+                    return { ...existing, ...incoming };
+                  },
+                },
+              });
+            },
+          },
+        },
+      },
+    },
+  }),
 });
 
 // 4
