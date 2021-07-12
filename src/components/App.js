@@ -2,9 +2,9 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Header from './Header';
-import CreateUser from './CreateUser';
+import SignUp from './Login/SignUp';
 import Login from './Login';
-import UserList from './UserList';
+import Home from './Home';
 
 const App = () => {
   return (
@@ -12,8 +12,8 @@ const App = () => {
       <Header />
       <div className="ph3 pv1 background-gray">
         <Switch>
-          <Route exact path="/" component={UserList} />
-          <Route exact path="/create" component={CreateUser} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/create" component={SignUp} />
           <Route exact path="/login" component={Login} />
         </Switch>
       </div>
