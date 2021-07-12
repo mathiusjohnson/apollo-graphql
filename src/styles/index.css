@@ -48,7 +48,7 @@
 @tailwind utilities;
 
 @layer utilities {
-	.btn
+	  .btn
     {
 			@apply px-2 font-bold tracking-widest rounded border-2 cursor-pointer text-center no-underline object-contain;
     }
@@ -81,4 +81,46 @@
       {
       @apply bg-green-500 border-green-500 opacity-70;
     }
+
+
+    .btn-secondary,
+    .btn-secondary:visited
+      {
+      @apply bg-none border-green-500 text-green-500;
+    }
+
+
+    .btn-secondary:hover,
+    .btn-secondary:visited:hover
+      {
+      @apply bg-none bg-green-500 text-white;
+    }
+
+    .btn-secondary:active
+      {
+      @apply bg-green-500 opacity-70;
+    }
+
+    .btn-tertiary,
+    .btn-tertiary:visited
+      {
+      @apply border-blue-500 text-blue-500;
+      }
+
+    .btn-tertiary:hover,
+    .btn-tertiary:visited:hover,
+    .btn-tertiary:focus
+      {
+      @apply bg-blue-200;
+      }
+    .btn-warning,
+    .btn-warning:visited {
+      @apply border-red-500 text-red-500;
+    }
+    .btn-warning:hover,
+    .btn-warning:visited:hover,
+    .btn-warning:focus
+      {
+      @apply bg-red-200;
+      }
 }
