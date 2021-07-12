@@ -6,7 +6,8 @@ import { AUTH_TOKEN } from '../constants';
 
 const Header = () => {
   const history = useHistory();
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  const authToken = localStorage.getItem('auth');
+  console.log(authToken);
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
@@ -26,7 +27,7 @@ const Header = () => {
           <div className="flex">
             <div className="ml1">|</div>
             <Link to="/create" className="ml1 no-underline black">
-              submit
+              Register
             </Link>
           </div>
         )}
@@ -36,8 +37,8 @@ const Header = () => {
           <div
             className="ml1 pointer black"
             onClick={() => {
-              localStorage.removeItem(AUTH_TOKEN);
-              history.push(`/`);
+              localStorage.removeItem('auth');
+              history.push(`/login`);
             }}
           >
             logout
