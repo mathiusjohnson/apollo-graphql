@@ -7,7 +7,6 @@ import { AUTH_TOKEN } from '../constants';
 const Header = () => {
   const history = useHistory();
   const authToken = localStorage.getItem('auth');
-  console.log(authToken);
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
