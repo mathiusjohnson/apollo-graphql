@@ -18,14 +18,18 @@ import { AUTH_TOKEN } from './constants';
 // 2
 const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql',
+  credentials: 'same-origin',
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
+  const token = localStorage.getItem('auth')
+    ? JSON.parse(localStorage.getItem('auth'))
+    : '';
+  console.log('in client: ', token.token);
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: token ? `Bearer ${token.token}` : '',
     },
   };
 });
