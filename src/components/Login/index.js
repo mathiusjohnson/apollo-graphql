@@ -1,10 +1,10 @@
 import React from 'react';
 import Login from './Login';
 
-const index = () => {
+const index = ({ login }) => {
   return (
     <div>
-      <Login />
+      <Login login={login} />
     </div>
   );
 };
