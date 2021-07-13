@@ -9,7 +9,6 @@ import { AUTH_TOKEN } from '../constants';
 const Header = ({ isLoggedIn }) => {
   const authToken = localStorage.getItem('auth');
   const client = useApolloClient();
-  console.log(isLoggedIn);
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
