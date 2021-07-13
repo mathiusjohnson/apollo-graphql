@@ -11,7 +11,6 @@ const AppRoute = ({
   ...rest
 }) => {
   const isLoggedIn = localStorage.getItem('auth') ? true : false;
-  console.log('is logged in: ', isLoggedIn);
   return (
     <Route
       path={path}
