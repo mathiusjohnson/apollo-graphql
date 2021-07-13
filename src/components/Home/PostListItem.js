@@ -13,7 +13,6 @@ const DELETE_POST_MUTATION = gql`
 
 const PostListItem = ({ post, POSTS_QUERY }) => {
   const history = useHistory();
-  console.log(post);
   const loggedInUserId = localStorage.getItem('userId');
   const myPost = loggedInUserId === post.user.id;
 
@@ -22,30 +21,38 @@ const PostListItem = ({ post, POSTS_QUERY }) => {
       id: post.id,
     },
     update(cache, { data: { removePost } }) {
-      cache.modify({
-        fields: {
-          posts(existingPostsRef, { readField }) {
-            console.log('posts? ', existingPostsRef);
-            return existingPostsRef.filter(
-              (postRef) => post.id !== readField('id', postRef)
-            );
-          },
-        },
+      const normalizedId = cache.identify({
+        id: post.id,
+        __typename: 'Post',
       });
-      // const { getAllPosts } = cache.readQuery({
-      //   query: POSTS_QUERY,
-      // });
-      // const updatedPosts = getAllPosts.filter((feedPost) => {
-      //   return feedPost.id !== post.id;
-      // });
-
-      // cache.writeQuery({
-      //   query: POSTS_QUERY,
-      //   data: {
-      //     getAllPosts: updatedPosts,
-      //   },
-      // });
+      console.log('normalized: ', normalizedId, removePost);
+      cache.evict({ id: normalizedId });
+      cache.gc();
     },
+    // cache.modify({
+    //   fields: {
+    //     posts(existingPostsRef, { readField }) {
+    //       console.log('posts? ', existingPostsRef);
+    //       return existingPostsRef.filter(
+    //         (postRef) => post.id !== readField('id', postRef)
+    //       );
+    //     },
+    //   },
+    // });
+    // const { getAllPosts } = cache.readQuery({
+    //   query: POSTS_QUERY,
+    // });
+    // const updatedPosts = getAllPosts.filter((feedPost) => {
+    //   return feedPost.id !== post.id;
+    // });
+
+    // console.log('updated: ', updatedPosts);
+    // cache.writeQuery({
+    //   query: POSTS_QUERY,
+    //   data: {
+    //     getAllPosts: updatedPosts,
+    //   },
+    // });
     onError: (error) => {
       console.log(error);
     },
