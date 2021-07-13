@@ -16,13 +16,12 @@ const CreatePost = () => {
   const [postText, setPostText] = useState('');
   const onContentChanged = (e) => setPostText(e.target.value);
 
-  const authToken = JSON.parse(localStorage.getItem('auth'))
-    ? JSON.parse(localStorage.getItem('auth'))
-    : '';
+  const userId = localStorage.getItem('userId');
+
   const [createPost] = useMutation(CREATE_POST_MUTATION, {
     variables: {
       textBody: postText,
-      posterId: authToken.user.id,
+      posterId: userId ? userId : '',
     },
     onError: (error) => {
       console.log(error);
