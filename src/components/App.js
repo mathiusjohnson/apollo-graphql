@@ -1,15 +1,15 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Header from './Header';
 import SignUp from './Login/SignUp';
 import Login from './Login';
 import Home from './Home';
 
-const App = () => {
+const App = ({ isLoggedIn }) => {
   return (
     <div className="center w85">
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
       <div className="ph3 pv1 background-gray">
         <Switch>
           <Route exact path="/" component={Home} />
