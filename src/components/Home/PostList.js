@@ -11,6 +11,7 @@ export const POSTS_QUERY = gql`
       posterId
       user {
         username
+        id
       }
     }
   }
