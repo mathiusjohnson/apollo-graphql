@@ -3,19 +3,6 @@ import gql from 'graphql-tag';
 import React from 'react';
 import { useHistory } from 'react-router';
 
-// export const POSTS_QUERY = gql`
-//   query {
-//     getAllPosts {
-//       id
-//       textBody
-//       posterId
-//       user {
-//         username
-//       }
-//     }
-//   }
-// `;
-
 const DELETE_POST_MUTATION = gql`
   mutation ($id: String!) {
     removePost(id: $id) {
@@ -26,30 +13,38 @@ const DELETE_POST_MUTATION = gql`
 
 const PostListItem = ({ post, POSTS_QUERY }) => {
   const history = useHistory();
-
-  const loggedInUser = localStorage.getItem('auth')
-    ? JSON.parse(localStorage.getItem('auth')).user
-    : '';
-  const myPost = loggedInUser.username === post.user.username;
+  console.log(post);
+  const loggedInUserId = localStorage.getItem('userId');
+  const myPost = loggedInUserId === post.user.id;
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     variables: {
       id: post.id,
     },
-    update(cache, { data: { deletePost } }) {
-      const { getAllPosts } = cache.readQuery({
-        query: POSTS_QUERY,
-      });
-      const updatedPosts = getAllPosts.filter((feedPost) => {
-        return feedPost.id !== post.id;
-      });
-
-      cache.writeQuery({
-        query: POSTS_QUERY,
-        data: {
-          getAllPosts: updatedPosts,
+    update(cache, { data: { removePost } }) {
+      cache.modify({
+        fields: {
+          posts(existingPostsRef, { readField }) {
+            console.log('posts? ', existingPostsRef);
+            return existingPostsRef.filter(
+              (postRef) => post.id !== readField('id', postRef)
+            );
+          },
         },
       });
+      // const { getAllPosts } = cache.readQuery({
+      //   query: POSTS_QUERY,
+      // });
+      // const updatedPosts = getAllPosts.filter((feedPost) => {
+      //   return feedPost.id !== post.id;
+      // });
+
+      // cache.writeQuery({
+      //   query: POSTS_QUERY,
+      //   data: {
+      //     getAllPosts: updatedPosts,
+      //   },
+      // });
     },
     onError: (error) => {
       console.log(error);
