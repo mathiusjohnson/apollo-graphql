@@ -11,23 +11,35 @@ import {
   ApolloClient,
   createHttpLink,
   InMemoryCache,
+  gql,
+  useQuery,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+import { cache } from './cache';
+import LoginPage from './pages/Login';
+import Header from './components/Header';
+
+export const typeDefs = gql`
+  extend type Query {
+    isLoggedIn: Boolean!
+  }
+`;
+
 // 2
 const httpLink = createHttpLink({
+  cache,
   uri: 'http://localhost:3000/graphql',
   credentials: 'same-origin',
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('auth')
-    ? JSON.parse(localStorage.getItem('auth'))
-    : '';
+  const token = localStorage.getItem('token');
+
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token.token}` : '',
+      authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
@@ -35,33 +47,36 @@ const authLink = setContext((_, { headers }) => {
 // 3
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache({
-    typePolicies: {
-      MutationEvent: {
-        fields: {
-          removePost: {
-            merge(_, incoming, { cache }) {
-              cache.modify({
-                fields: {
-                  Post(existing = []) {
-                    console.log('existing and incoming: ', existing, incoming);
-                    return { ...existing, ...incoming };
-                  },
-                },
-              });
-            },
-          },
-        },
-      },
-    },
-  }),
+  cache,
+  typeDefs,
 });
 
+const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+function IsLoggedIn() {
+  const { data } = useQuery(IS_LOGGED_IN);
+  console.log('date in loggedin: ', data);
+  const isLoggedIn = data.isLoggedIn;
+  return isLoggedIn ? (
+    <App isLoggedIn={isLoggedIn} />
+  ) : (
+    <div className="center w85">
+      <Header isLoggedIn={isLoggedIn} />
+      <div className="ph3 pv1 background-gray">
+        <LoginPage />
+      </div>
+    </div>
+  );
+}
 // 4
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={client}>
-      <App />
+      <IsLoggedIn />
     </ApolloProvider>
   </BrowserRouter>,
   document.getElementById('root')
