@@ -18,7 +18,7 @@ const CreatePost = () => {
 
   const userId = localStorage.getItem('userId');
 
-  const [createPost] = useMutation(CREATE_POST_MUTATION, {
+  const [createPost, { data, error }] = useMutation(CREATE_POST_MUTATION, {
     variables: {
       textBody: postText,
       posterId: userId ? userId : '',
@@ -26,10 +26,16 @@ const CreatePost = () => {
     onError: (error) => {
       console.log(error);
     },
-    // onCompleted: () => history.push('/'),
   });
+
+  const onHandlePostSubmitted = (e) => {
+    e.preventDefault();
+    console.log('submitted!');
+    createPost();
+  };
+
   return (
-    <form onSubmit={createPost} className="flex space-x-2">
+    <form onSubmit={(e) => onHandlePostSubmitted(e)} className="flex space-x-2">
       <textarea onChange={onContentChanged} className="rounded-lg"></textarea>
       <button type="submit" className="btn btn-primary">
         Post
