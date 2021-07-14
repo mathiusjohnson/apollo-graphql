@@ -29,7 +29,7 @@ const UPDATE_POST_MUTATION = gql`
   }
 `;
 
-const PostListItem = ({ post, POSTS_QUERY }) => {
+const PostListItem = ({ post }) => {
   const [postText, setPostText] = useState(post.textBody);
 
   const history = useHistory();
